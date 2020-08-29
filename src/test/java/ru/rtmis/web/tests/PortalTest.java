@@ -34,7 +34,7 @@ public class PortalTest {
     @Test
     public void shouldBeVisibleRegions () {
         startPage.openRegionList();
-        assertArrayEquals(expectedRegions, startPage.getGegionList());
+        assertArrayEquals(expectedRegions, startPage.getRegionList());
     }
 
     @Test

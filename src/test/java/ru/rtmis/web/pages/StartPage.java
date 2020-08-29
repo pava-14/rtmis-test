@@ -45,13 +45,12 @@ public class StartPage {
         return selectedRegion.getText();
     }
 
-    public String[] getGegionList() {
+    public String[] getRegionList() {
         List<SelenideElement> regionList = $$(regionListSelector);
         String[] regions = new String[regionList.size()];
-        int index = 0;
-        for (SelenideElement litem : regionList) {
-            regions[index] = litem.getText();
-            index++;
+
+        for (int index = 0; index < regionList.size();index++) {
+            regions[index] = regionList.get(index).getText();
         }
         return regions;
     }
