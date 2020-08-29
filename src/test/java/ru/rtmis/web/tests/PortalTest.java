@@ -8,8 +8,8 @@ import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PortalTest {
-    private final String startPageUrl = "https://k-vrachu.ru/";
     private StartPage startPage;
+    private final String startPageUrl = "https://k-vrachu.ru/";
     private final String[] expectedRegions = {"Астраханская область",
             "Вологодская область", "Калужская область", "Пензенская область",
             "Пермский край", "Псковская область",
