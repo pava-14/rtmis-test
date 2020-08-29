@@ -10,27 +10,30 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class StartPage {
-    private final String portalCaption = "Региональный портал медицинских услуг";
     private final String regionListSelector = ".cap .region li";
     private final String enterCaption = "Вход";
+    private final String enterDemoCaption = "Демо-режим";
+    private final String enterDemoButtonCaption = "Включить демо-режим";
+    private final String enterDemoLabel = "В демо-режиме можно ознакомиться со всеми возможностями " +
+            "портала без регистрации. Изменения сохраняться не будут.";
+    private final String demoAlertCaption = "Включен ознакомительный режим. Запись в базу данных не " +
+            "производится.";
+    private final String exitDemoButtonCaption = "Выключить";
+
+    private final String rememberCaption = "Запомнить меня";
     private final String esiaLinkCaption = "Войти через портал Госуслуг РФ (ЕСИА)";
+
+    private final SelenideElement topAlertSection = $(".top-alert");
     private final SelenideElement wrapperSection = $(".cap");
     private final SelenideElement captionField = $(".cap .name h1");
+    private final SelenideElement captionPerson = $(".cap .person");
     private final SelenideElement selectedRegion = $(".cap .region");
+
     private final SelenideElement enterBoxModal = $(".enterBoxModal");
     private final SelenideElement loginField = $(".enterBoxModal [name=username]");
     private final SelenideElement passwordField = $(".enterBoxModal [name=password]");
-    private final SelenideElement rememberCheckbox = $(".enterBoxModal [name=remember]");
     private final SelenideElement forgotPassLink = $(".enterBoxModal .forgot_pass_link");
     private final SelenideElement buttonLoginSubmit = $(".enterBoxModal [name=login-submit]");
-
-
-//    private final String creditCaption = "Кредит по данным карты";
-//    private final String headerCaption = "Путешествие дня";
-//    private final String buttonOrderCaption = "Купить";
-//    private final String buttonCreditCaption = "Купить в кредит";
-//    private final SelenideElement buttonCredit = $(withText(buttonCreditCaption));
-//    private final SelenideElement buttonOrder = $(byText(buttonOrderCaption));
 
     public StartPage() {
         captionField.shouldBe(visible);
@@ -49,7 +52,7 @@ public class StartPage {
         List<SelenideElement> regionList = $$(regionListSelector);
         String[] regions = new String[regionList.size()];
 
-        for (int index = 0; index < regionList.size();index++) {
+        for (int index = 0; index < regionList.size(); index++) {
             regions[index] = regionList.get(index).getText();
         }
         return regions;
@@ -64,22 +67,26 @@ public class StartPage {
         wrapperSection.$(withText(enterCaption)).click();
         loginField.shouldBe(visible);
         passwordField.shouldBe(visible);
-        rememberCheckbox.shouldBe(visible);
         buttonLoginSubmit.shouldBe(visible);
+        forgotPassLink.shouldBe(visible);
+        enterBoxModal.$(withText(rememberCaption)).shouldBe(visible);
         enterBoxModal.$(withText(esiaLinkCaption)).shouldBe(visible);
     }
 
-//        $(withText("Свердловская область1")).waitUntil(visible, 15000);
+    public void enterDemo() {
+        wrapperSection.$(withText(enterDemoCaption)).hover();
+        $(withText(enterDemoLabel)).waitUntil(visible, 15000);
+        $(withText(enterDemoButtonCaption)).click();
+        topAlertSection.$(withText(demoAlertCaption)).waitUntil(visible, 15000);
+        topAlertSection.$(withText(exitDemoButtonCaption)).waitUntil(visible, 15000);
+    }
 
-//    public OrderPage selectOrderByCard() {
-//        buttonOrder.click();
-//        $(withText(orderCaption)).waitUntil(visible, 5000);
-//        return Selenide.page(OrderPage.class);
-//    }
-//
-//    public OrderPage selectOrderByCredit() {
-//        buttonCredit.click();
-//        $(withText(creditCaption)).waitUntil(visible, 5000);
-//        return Selenide.page(OrderPage.class);
-//    }
+    public void checkDemoUserProfile(String demoUserFullName) {
+        captionPerson.$(withText(demoUserFullName)).waitUntil(visible, 15000);
+    }
+
+    public void exitDemo() {
+        topAlertSection.$(withText(exitDemoButtonCaption)).click();
+        $(withText(enterDemoCaption)).waitUntil(visible, 15000);
+    }
 }
